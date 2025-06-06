@@ -1,6 +1,5 @@
 import Class from "../models/class.model.js";
 import Student from "../models/student.model.js";
-import Schedule from "../models/schedule.model.js";
 // ==============================
 // Create a New Class
 // ==============================
@@ -82,9 +81,6 @@ export const deleteClass = async (req, res) => {
 
     const classStudentCount = (
       await Student.find({ student_class: id, school: schoolId })
-    ).length;
-    const classScheduleCount = (
-      await Schedule.find({ class: id, school: schoolId })
     ).length;
 
     if (classStudentCount === 0 && classScheduleCount === 0) {
