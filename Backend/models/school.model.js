@@ -5,7 +5,6 @@ const schoolSchema = new mongoose.Schema({
   email: {type: String, required: true},
   phone: {type: String, required: true},
   admin_name: {type: String, required: true},
-  admin_image: {type: String, required: true},
   password:{type: String, required: true},
   createdAt: {type:Date, default: new Date()}
 })
