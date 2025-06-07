@@ -20,9 +20,12 @@ schoolRouter.post("/login", loginSchool);
 // Get all schools
 schoolRouter.get("/get-all", getAllSchools);
 
-// Get single school by ID
-schoolRouter.get("/get/:id", authmiddleware(['SCHOOL']), getSchoolData);
+schoolRouter.get(
+  "/get-single",
+  authmiddleware(["SCHOOL"]), // Ensures only authenticated schools can access
+  getSchoolData
+);
 
-schoolRouter.put("/update/:id", authmiddleware(['SCHOOL']), updateSchool);
+schoolRouter.patch("/update", authmiddleware(["SCHOOL"]), updateSchool);
 
 export default schoolRouter;

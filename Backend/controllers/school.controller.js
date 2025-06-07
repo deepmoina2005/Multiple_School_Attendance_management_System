@@ -143,7 +143,7 @@ export const getAllSchools = async (req, res) => {
 // ===========================
 export const getSchoolData = async (req, res) => {
   try {
-    const id = req.user.id; // Coming from token middleware
+    const id = req.user.id; // Assuming this is injected by auth middleware
 
     const school = await School.findById(id).select("-password");
     if (!school) {
@@ -153,19 +153,20 @@ export const getSchoolData = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "School fetched successfully.",
-      data: school,
+      school, // renamed from `data` to `school` for clarity
     });
   } catch (error) {
-    console.error("Get School Data Error:", error);
-    res.status(500).json({
+    console.error("Get School Data Error:", error.message);
+    return res.status(500).json({
       success: false,
       message: "Server error while fetching school data.",
     });
   }
 };
+
 
 // ===========================
 // UPDATE SCHOOL DETAILS (From Auth Middleware)

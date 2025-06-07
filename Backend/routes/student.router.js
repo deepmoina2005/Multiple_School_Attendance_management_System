@@ -1,37 +1,26 @@
 // routes/teacher.routes.js
 import express from "express";
 import authmiddleware from "../middleware/auth.js";
-import {
-  registerTeacher,
-  loginTeacher,
-  updateTeacher,
-  getTeachersWithQuery,
-  getTeacherOwnData,
-  getTeacherById,
-  deleteTeacher,
-} from "../controllers/teacher.controller.js";
+import { deleteStudent, getStudentOwntData, getStudentsWithQuery, loginStudent, registerStudent, updateStudent } from "../controllers/student.controller.js";
 
-const teacherRouter = express.Router();
+const studentRouter = express.Router();
 
 // Register a teacher
-teacherRouter.post("/register", registerTeacher);
+studentRouter.post("/register", authmiddleware(['SCHOOL']), registerStudent);
 
 // Login a teacher
-teacherRouter.post("/login", loginTeacher);
-
-// Update own profile (Teacher role)
-teacherRouter.patch("/update", authmiddleware(['TEACHER']), updateTeacher);
+studentRouter.post("/login", loginStudent);
 
 // Get all teachers (School role)
-teacherRouter.get("/all", authmiddleware(['SCHOOL']), getTeachersWithQuery);
+studentRouter.get("/all", authmiddleware(['SCHOOL']), getStudentsWithQuery);
 
-// Get own teacher profile
-teacherRouter.get("/fetch-single", authmiddleware(['TEACHER']), getTeacherOwnData);
+// Get a specific student by ID
+studentRouter.get("/fetch/:id", authmiddleware(['SCHOOL']), getStudentOwntData);
 
-// Get a specific teacher by ID
-teacherRouter.get("/fetch/:id", authmiddleware(['SCHOOL']), getTeacherById);
+// Delete a student by ID
+studentRouter.delete("/delete/:id", authmiddleware(['SCHOOL']), deleteStudent);
 
-// Delete a teacher by ID
-teacherRouter.delete("/delete/:id", authmiddleware(['SCHOOL']), deleteTeacher);
+// Update a Student
+studentRouter.patch("/update/:id", authmiddleware(['SCHOOL']), updateStudent);
 
-export default teacherRouter;
+export default studentRouter;

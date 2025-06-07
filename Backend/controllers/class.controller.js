@@ -71,29 +71,31 @@ export const updateClass = async (req, res) => {
   }
 };
 
-// ==============================
-// Delete Class by ID
-// ==============================
 export const deleteClass = async (req, res) => {
   try {
-    let id = req.params.id;
-    let schoolId = req.user.schoolId;
+    const id = req.params.id;
+    const schoolId = req.user.schoolId;
 
-    const classStudentCount = (
-      await Student.find({ student_class: id, school: schoolId })
-    ).length;
+    const classStudentCount = await Student.countDocuments({
+      student_class: id,
+      school: schoolId,
+    });
 
-    if (classStudentCount === 0 && classScheduleCount === 0) {
+    if (classStudentCount === 0) {
       await Class.findOneAndDelete({ _id: id, school: schoolId });
-      res
-        .status(200)
-        .json({ success: true, message: "Class Deleted Successfully" });
+      return res.status(200).json({
+        success: true,
+        message: "Class Deleted Successfully",
+      });
     } else {
-        res.status(500).json({success: false, message:"This class is already in use"})
+      return res.status(400).json({
+        success: false,
+        message: "This class is already in use.",
+      });
     }
   } catch (error) {
     console.error("Delete Class Error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error while deleting class.",
     });
