@@ -5,32 +5,38 @@ import School from "../models/school.model.js";
 // ===========================
 // REGISTER SCHOOL
 // ===========================
+
 export const registerSchool = async (req, res) => {
   try {
     const { school_name, email, phone, admin_name, password } = req.body;
-
-    // Check if email already registered
-    const existingSchool = await School.findOne({ email });
-    if (existingSchool) {
+    // Validate input (optional but recommended)
+    if (!school_name || !email || !phone || !admin_name || !password) {
       return res.status(400).json({
         success: false,
-        message: "A school with this email already exists.",
+        message: "All fields are required.",
+      });
+    }
+
+    // Check if school with same email already exists
+    const existingSchool = await School.findOne({ email });
+    if (existingSchool) {
+      return res.status(409).json({
+        success: false,
+        message: "This email already exists.",
       });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Save new school
-    const newSchool = new School({
+    // Save new school to DB
+    const newSchool = await School.create({
       school_name,
       email,
       phone,
       admin_name,
       password: hashedPassword,
     });
-
-    await newSchool.save();
 
     res.status(201).json({
       success: true,
@@ -44,13 +50,14 @@ export const registerSchool = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Register School Error:", error);
+    console.error("Register School Error:", error.message);
     res.status(500).json({
       success: false,
       message: "Server error while registering school.",
     });
   }
 };
+
 
 // ===========================
 // LOGIN SCHOOL

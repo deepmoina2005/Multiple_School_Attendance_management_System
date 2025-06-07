@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Student from "../models/student.model.js";
-
+import formidable from 'formidable';
 // ===========================
 // REGISTER STUDENT
 // ===========================

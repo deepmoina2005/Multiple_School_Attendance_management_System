@@ -1,11 +1,11 @@
 // routes/school.routes.js
 import express from "express";
 import {
-  registerSchool,
   loginSchool,
   getAllSchools,
   getSchoolData,
-  updateSchool, // Assumes controller function exists
+  updateSchool,
+  registerSchool, // Assumes controller function exists
 } from "../controllers/school.controller.js";
 import authmiddleware from "../middleware/auth.js";
 
